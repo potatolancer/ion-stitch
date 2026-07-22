@@ -1,0 +1,17 @@
+This project uses Tkinter, the standard GUI library for Python.
+
+Tkinter is distributed as part of Python under the Python Software Foundation License.
+Tk is developed by the Tcl/Tk Project and is distributed under a BSD-style license.
+
+See:
+- Python License: https://docs.python.org/3/license.html
+- Tcl/Tk License: https://www.tcl.tk/software/tcltk/license.html
+
+___
+
+This project uses openpyxl.
+
+Copyright (c) openpyxl contributors
+
+Licensed under the MIT License.
+See: https://github.com/ericgazoni/openpyxl/blob/master/LICENCE.rst
