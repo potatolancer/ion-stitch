@@ -5,13 +5,13 @@ Ion Stitch is a small program that can be run headless or with a GUI. It takes p
 ## Installation
 Install Python
 Open a terminal and type:
-```pip install openpyxl```
-```pip install tkinter```
+    ```pip install openpyxl```
+    ```pip install tkinter```
 
 Copy the files from github at https://github.com/potatolancer/ion-stitch
 Enter the directory that you saved the files to.
 To run the program type:
-```py main.py```
+    ```py main.py```
 
 ## Usage - Headless
 Use the Python file labeled ion_stitch.py in a shell and provide flags. Any number of flags can be provided in a single operation. If you are uncertain, run the ion_stitch.exe for a graphical experience instead.

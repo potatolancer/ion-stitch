@@ -219,10 +219,10 @@ class ReviewWindow(tk.Toplevel):
             if self.ion_modes[2].mtb[r].selected_mode == "P":
                 self.modevar[r].set("Positive")
                 self.mode_sel[r]["values"] = ("Positive", "Negative*", "Exclude*")
-            else:
+            elif self.ion_modes[2].mtb[r].selected_mode == "N":
                 self.modevar[r].set("Negative")
                 self.mode_sel[r]["values"] = ("Positive*", "Negative", "Exclude*")
-            if (self.ion_modes[2].mtb[r].name in conf.exclusions):
+            elif (self.ion_modes[2].mtb[r].name in conf.exclusions):
                 self.modevar[r].set("Exclude*")
             self.mode_sel[r].config(state=tk.DISABLED)
             self.mode_sel[r].bind(

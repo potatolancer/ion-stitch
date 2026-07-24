@@ -127,8 +127,8 @@ class Conf():
 				wordlist = self.buf_wordlist_from_line(line)
 				self.final_col_range[0] = wordlist[0]
 				self.final_col_range[1] = wordlist[1]
-			#elif (LBL_EXCLUSION == last_lbl):
-			#	self.exclusions.append(line)
+			elif (LBL_EXCLUSION == last_lbl):
+				self.exclusions.append(line)
 		f.close()
 
 		self.log("positive ion mode read from conf: " + self.pos)
@@ -608,27 +608,30 @@ def stitch_modes(conf, mode_p, mode_n):
 
 	mode_s = xl_data(conf.stitch_filename)
 	mode_s.header = mode_p.header
-	p_ctr = 0
-	n_ctr = 0
-	for i in range(0, len(unique_mtb)):
-		mtb_p = None
-		if (p_ctr < len(mode_p.mtb)):
-			if (mode_p.mtb[p_ctr].name == unique_mtb[i]):
-				mtb_p = mode_p.mtb[p_ctr]
-				p_ctr += 1
+	mode_p_by_name = {}
+	for mtb in mode_p.mtb:
+		if (mtb.name == NAME_ERROR or mtb.name in mode_p_by_name):
+			continue
+		mode_p_by_name[mtb.name] = mtb
 
-		mtb_n = None
-		if (n_ctr < len(mode_n.mtb)):
-			if (mode_n.mtb[n_ctr].name == unique_mtb[i]):
-				mtb_n = mode_n.mtb[n_ctr]
-				n_ctr += 1
+	mode_n_by_name = {}
+	for mtb in mode_n.mtb:
+		if (mtb.name == NAME_ERROR or mtb.name in mode_n_by_name):
+			continue
+		mode_n_by_name[mtb.name] = mtb
 
-		mtb_s = None
-		if (mtb_p == None):
+	for mtb_name in unique_mtb:
+		mtb_p = mode_p_by_name.get(mtb_name)
+		mtb_n = mode_n_by_name.get(mtb_name)
+
+		if (mtb_p is None and mtb_n is None):
+			continue
+
+		if (mtb_p is None):
 			mtb_s = mtb_n
 			mtb_s.detected_mode = 'N'
 			mtb_s.selected_mode = 'N'
-		elif (mtb_n == None):
+		elif (mtb_n is None):
 			mtb_s = mtb_p
 			mtb_s.detected_mode = 'P'
 			mtb_s.selected_mode = 'P'
@@ -736,7 +739,6 @@ def create_xl(mode_p, mode_n, mode_s, conf):
 	n_ctr = 0
 	for s_ctr in range(0, len(mode_s.mtb)):
 		conf.check_error()
-		cell_color = "000000"
 		print(str(len(mode_p.mtb)) + " " + (str(p_ctr)))
 		mtb_p = mode_p.mtb[p_ctr]
 		mtb_n = mode_n.mtb[n_ctr]
@@ -756,9 +758,11 @@ def create_xl(mode_p, mode_n, mode_s, conf):
 
 		cur_row = []
 		cur_row.append(mtb_s.detected_mode)
-		cur_row.append(mtb_s.selected_mode)
+		if (mtb_s.name in conf.exclusions):
+			cur_row.append("E")
+		else:
+			cur_row.append(mtb_s.selected_mode)
 		cur_row.append(mtb_s.name)
-
 
 		for i in range(0, conf.num_id_filters):
 			id = conf.get_id_filter(i).id
